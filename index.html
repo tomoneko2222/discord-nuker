@@ -9,7 +9,7 @@
     <h1>Discord nuker</h1>
     <input id="token" type="text" placeholder="Discord Token">
     <textarea id="channelId" placeholder="Channel IDs (one per line)"></textarea>
-    <textarea id="message" placeholder="Message (use new lines for multiple messages)"></textarea>
+    <textarea id="message" placeholder="Message"></textarea>
     <input id="interval" type="number" step="0.1" placeholder="Interval (s)">
     <button id="start-button">Start</button>
     <button id="stop-button">Stop</button>
@@ -28,24 +28,19 @@
     startButton.addEventListener('click', () => {
       const token = tokenInput.value;
       const channelIds = channelIdInput.value.split('\n').map(id => id.trim()).filter(id => id);
-      const messages = messageInput.value.split('\n').map(msg => msg.trim()).filter(msg => msg);
-      const interval = parseFloat(intervalInput.value); // 小数点数として取得
+      const message = messageInput.value;
+      const interval = parseFloat(intervalInput.value);
 
-      if (!token || !channelIds.length || !messages.length || isNaN(interval)) {
+      if (!token || !channelIds.length || !message || isNaN(interval)) {
         alert('Please fill in all fields');
         return;
       }
 
-      let messageIndex = 0;
-
       intervalId = setInterval(() => {
         channelIds.forEach(channelId => {
-          if (messageIndex < messages.length) {
-            sendMessage(token, channelId, messages[messageIndex]);
-          }
+          sendMessage(token, channelId, message);
         });
-        messageIndex = (messageIndex + 1) % messages.length; // Loop through messages
-      }, interval * 1000); // 秒をミリ秒に変換
+      }, interval * 1000);
     });
 
     stopButton.addEventListener('click', () => {
