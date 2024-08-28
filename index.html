@@ -10,7 +10,7 @@
     <input id="token" type="text" placeholder="Discord Token">
     <textarea id="channelId" placeholder="Channel IDs (one per line)"></textarea>
     <textarea id="message" placeholder="Message (use new lines for multiple messages)"></textarea>
-    <input id="interval" type="number" placeholder="Interval (s)">
+    <input id="interval" type="number" step="0.1" placeholder="Interval (s)">
     <button id="start-button">Start</button>
     <button id="stop-button">Stop</button>
   </div>
@@ -29,7 +29,7 @@
       const token = tokenInput.value;
       const channelIds = channelIdInput.value.split('\n').map(id => id.trim()).filter(id => id);
       const messages = messageInput.value.split('\n').map(msg => msg.trim()).filter(msg => msg);
-      const interval = parseInt(intervalInput.value);
+      const interval = parseFloat(intervalInput.value); // 小数点数として取得
 
       if (!token || !channelIds.length || !messages.length || isNaN(interval)) {
         alert('Please fill in all fields');
@@ -45,7 +45,7 @@
           }
         });
         messageIndex = (messageIndex + 1) % messages.length; // Loop through messages
-      }, interval * 1000); // Convert seconds to milliseconds
+      }, interval * 1000); // 秒をミリ秒に変換
     });
 
     stopButton.addEventListener('click', () => {
