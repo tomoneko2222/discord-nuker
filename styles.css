@@ -11,35 +11,39 @@ body {
 
 .container {
   text-align: center;
+  width: 90%; /* スマホでも見やすくするために幅を調整 */
 }
 
 h1 {
   color: #333;
+  font-size: 2em; /* フォントサイズを大きく */
 }
 
 input, textarea {
   display: block;
-  margin: 10px auto;
-  padding: 10px;
+  margin: 15px auto; /* マージンを少し大きく */
+  padding: 15px; /* パディングを大きく */
   width: 100%;
   max-width: 450px; /* 1.5倍の幅 */
   border: 1px solid #ccc;
   border-radius: 5px;
+  font-size: 1.2em; /* フォントサイズを大きく */
 }
 
 textarea {
-  height: 100px; /* スクロール可能にするための高さ */
+  height: 150px; /* スクロール可能にするための高さを調整 */
   resize: vertical;
 }
 
 button {
-  padding: 10px 20px;
-  margin: 10px 5px;
+  padding: 15px 30px; /* パディングを大きく */
+  margin: 15px 10px; /* マージンを大きく */
   border: none;
   border-radius: 5px;
   background-color: #007bff;
   color: white;
   cursor: pointer;
+  font-size: 1.2em; /* フォントサイズを大きく */
 }
 
 button:hover {
