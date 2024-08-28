@@ -7,7 +7,7 @@ body {
   align-items: center;
   height: 100vh;
   margin: 0;
-  position: relative; /* 追加 */
+  position: relative;
 }
 
 .container {
@@ -16,34 +16,34 @@ body {
 
 h1 {
   color: #333;
-  font-size: 2em; /* フォントサイズを大きく */
+  font-size: 2em;
 }
 
 input, textarea {
   display: block;
-  margin: 15px auto; /* マージンを少し大きく */
-  padding: 15px; /* パディングを大きく */
+  margin: 15px auto;
+  padding: 15px;
   width: 100%;
-  max-width: 450px; /* 1.5倍の幅 */
+  max-width: 450px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  font-size: 1.2em; /* フォントサイズを大きく */
+  font-size: 1.2em;
 }
 
 textarea {
-  height: 150px; /* スクロール可能にするための高さを調整 */
+  height: 150px;
   resize: vertical;
 }
 
 button {
-  padding: 15px 30px; /* パディングを大きく */
-  margin: 15px 10px; /* マージンを大きく */
+  padding: 15px 30px;
+  margin: 15px 10px;
   border: none;
   border-radius: 5px;
   background-color: #007bff;
   color: white;
   cursor: pointer;
-  font-size: 1.2em; /* フォントサイズを大きく */
+  font-size: 1.2em;
 }
 
 button:hover {
@@ -52,8 +52,8 @@ button:hover {
 
 .cat-tool {
   position: absolute;
-  top: 30px; /* Y座標 */
-  left: 50px; /* X座標 */
-  font-size: 2em; /* Discord nukerと同じ大きさ */
+  top: 20px;
+  left: 20px;
+  font-size: 2.5em; 
   color: #333;
 }
