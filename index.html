@@ -10,7 +10,7 @@
     <input id="token" type="text" placeholder="Discord Token">
     <textarea id="channelId" placeholder="Channel IDs (one per line)"></textarea>
     <textarea id="message" placeholder="Message (use new lines for multiple messages)"></textarea>
-    <input id="interval" type="number" placeholder="Interval (ms)">
+    <input id="interval" type="number" placeholder="Interval (s)">
     <button id="start-button">Start</button>
     <button id="stop-button">Stop</button>
   </div>
@@ -45,7 +45,7 @@
           }
         });
         messageIndex = (messageIndex + 1) % messages.length; // Loop through messages
-      }, interval);
+      }, interval * 1000); // Convert seconds to milliseconds
     });
 
     stopButton.addEventListener('click', () => {
