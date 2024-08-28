@@ -7,6 +7,7 @@ body {
   align-items: center;
   height: 100vh;
   margin: 0;
+  font-size: 18px; /* フォントサイズを大きく */
 }
 
 .container {
@@ -15,31 +16,34 @@ body {
 
 h1 {
   color: #333;
+  font-size: 24px; /* ヘッダーのフォントサイズを大きく */
 }
 
 input, textarea {
   display: block;
   margin: 10px auto;
-  padding: 10px;
+  padding: 15px; /* パディングを大きく */
   width: 100%;
-  max-width: 450px; /* 1.5倍の幅 */
+  max-width: 450px; /* 最大幅はそのまま */
   border: 1px solid #ccc;
   border-radius: 5px;
+  font-size: 16px; /* 入力欄のフォントサイズを大きく */
 }
 
 textarea {
-  height: 100px; /* スクロール可能にするための高さ */
+  height: 120px; /* スクロール可能にするための高さを調整 */
   resize: vertical;
 }
 
 button {
-  padding: 10px 20px;
+  padding: 15px 25px; /* ボタンのパディングを大きく */
   margin: 10px 5px;
   border: none;
   border-radius: 5px;
   background-color: #007bff;
   color: white;
   cursor: pointer;
+  font-size: 16px; /* ボタンのフォントサイズを大きく */
 }
 
 button:hover {
