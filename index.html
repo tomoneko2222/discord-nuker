@@ -5,13 +5,15 @@
   <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-  <h1>Discord nuker</h1>
-  <input id="token" type="text" placeholder="Discord Token">
-  <input id="channelId" type="text" placeholder="Channel ID">
-  <input id="message" type="text" placeholder="Message">
-  <input id="interval" type="number" placeholder="Interval (ms)">
-  <button id="start-button">Start</button>
-  <button id="stop-button">Stop</button>
+  <div class="container">
+    <h1>Discord nuker</h1>
+    <input id="token" type="text" placeholder="Discord Token">
+    <input id="channelId" type="text" placeholder="Channel ID">
+    <input id="message" type="text" placeholder="Message">
+    <input id="interval" type="number" placeholder="Interval (ms)">
+    <button id="start-button">Start</button>
+    <button id="stop-button">Stop</button>
+  </div>
 
   <script>
     const startButton = document.getElementById('start-button');
