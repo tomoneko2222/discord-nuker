@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Discord Webhook Bot</title>
+  <title>Discord Message Sender</title>
 </head>
 <body>
-  <h1>Discord Webhook Bot</h1>
-  <input id="token" type="text" placeholder="Token">
+  <h1>Discord Message Sender</h1>
+  <input id="token" type="text" placeholder="Discord Token">
   <input id="channelId" type="text" placeholder="Channel ID">
   <input id="message" type="text" placeholder="Message">
   <button id="start-button">Start</button>
@@ -31,7 +31,7 @@
       }
 
       intervalId = setInterval(() => {
-        sendWebhookMessage(token, channelId, message);
+        sendMessage(token, channelId, message);
       }, 1000);
     });
 
@@ -39,22 +39,27 @@
       clearInterval(intervalId);
     });
 
-    function sendWebhookMessage(token, channelId, message) {
-      const webhookUrl = `https://discord.com/api/v9/channels/${channelId}/messages`;
+    function sendMessage(token, channelId, message) {
+      const url = `https://discord.com/api/v9/channels/${channelId}/messages`;
       const headers = {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': token
       };
       const body = JSON.stringify({ content: message });
 
-      fetch(webhookUrl, {
+      fetch(url, {
         method: 'POST',
-        headers,
-        body
+        headers: headers,
+        body: body
       })
-      .then(response => response.json())
-      .then(data => console.log(data))
-      .catch(error => console.error(error));
+      .then(response => {
+        if (response.ok) {
+          console.log(`Message sent: ${message}`);
+        } else {
+          console.error(`Error: ${response.status}`);
+        }
+      })
+      .catch(error => console.error('Error:', error));
     }
   </script>
 </body>
