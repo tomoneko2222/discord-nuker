@@ -28,19 +28,17 @@
     startButton.addEventListener('click', () => {
       const token = tokenInput.value;
       const channelIds = channelIdInput.value.split(',').map(id => id.trim());
-      const messages = messageInput.value.split('\n');
+      const message = messageInput.value;
       const interval = parseInt(intervalInput.value);
 
-      if (!token || !channelIds.length || !messages.length || isNaN(interval)) {
+      if (!token || !channelIds.length || !message || isNaN(interval)) {
         alert('Please fill in all fields');
         return;
       }
 
       intervalId = setInterval(() => {
         channelIds.forEach(channelId => {
-          messages.forEach(message => {
-            sendMessage(token, channelId, message);
-          });
+          sendMessage(token, channelId, message);
         });
       }, interval);
     });
