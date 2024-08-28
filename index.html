@@ -8,7 +8,7 @@
   <div class="container">
     <h1>Discord nuker</h1>
     <input id="token" type="text" placeholder="Discord Token">
-    <textarea id="channelId" placeholder="Channel IDs (comma separated)"></textarea>
+    <textarea id="channelId" placeholder="Channel IDs (one per line)"></textarea>
     <textarea id="message" placeholder="Message (use new lines for multiple messages)"></textarea>
     <input id="interval" type="number" placeholder="Interval (ms)">
     <button id="start-button">Start</button>
@@ -27,7 +27,7 @@
 
     startButton.addEventListener('click', () => {
       const token = tokenInput.value;
-      const channelIds = channelIdInput.value.split(',').map(id => id.trim());
+      const channelIds = channelIdInput.value.split('\n').map(id => id.trim());
       const message = messageInput.value;
       const interval = parseInt(intervalInput.value);
 
@@ -51,7 +51,7 @@
       const url = `https://discord.com/api/v9/channels/${channelId}/messages`;
       const headers = {
         'Content-Type': 'application/json',
-        'Authorization': token
+        'Authorization': `Bot ${token}`
       };
       const body = JSON.stringify({ content: message });
 
@@ -64,7 +64,9 @@
         if (response.ok) {
           console.log(`Message sent to ${channelId}: ${message}`);
         } else {
-          console.error(`Error: ${response.status}`);
+          return response.json().then(error => {
+            console.error(`Error: ${response.status}`, error);
+          });
         }
       })
       .catch(error => console.error('Error:', error));
