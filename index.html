@@ -5,16 +5,34 @@
   <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-  <div class="cat-tool">cat tool</div>
-  <div class="container">
+  <header>
     <h1>Discord nuker</h1>
-    <input id="token" type="text" placeholder="Discord Token">
-    <textarea id="channelId" placeholder="Channel IDs"></textarea>
-    <textarea id="message" placeholder="Message"></textarea>
-    <input id="interval" type="number" step="0.1" placeholder="Interval (s)">
-    <button id="start-button">Start</button>
-    <button id="stop-button">Stop</button>
-  </div>
+  </header>
+  
+  <main>
+    <div class="container">
+      <textarea id="token" placeholder="Discord Tokens (1 token per line)" class="token-input"></textarea>
+      <textarea id="channelId" placeholder="Channel IDs"></textarea>
+      <textarea id="message" placeholder="Message"></textarea>
+      <input id="interval" type="number" step="0.1" placeholder="Interval (s)">
+      <div class="button-group">
+        <button id="start-button">Start</button>
+        <button id="stop-button">Stop</button>
+        <label for="random-chars" class="checkbox-label">
+          <input type="checkbox" id="random-chars">
+          Add random characters
+        </label>
+      </div>
+    </div>
+
+    <div class="console">
+      <div class="console-header">
+        Console
+        <button id="clear-log-button">Clear Log</button>
+      </div>
+      <div id="console-output"></div>
+    </div>
+  </main>
 
   <script>
     const startButton = document.getElementById('start-button');
@@ -23,29 +41,42 @@
     const channelIdInput = document.getElementById('channelId');
     const messageInput = document.getElementById('message');
     const intervalInput = document.getElementById('interval');
+    const consoleOutput = document.getElementById('console-output');
+    const clearLogButton = document.getElementById('clear-log-button');
+    const randomCharsCheckbox = document.getElementById('random-chars');
 
     let intervalId = null;
 
     startButton.addEventListener('click', () => {
-      const token = tokenInput.value;
+      const tokens = tokenInput.value.split('\n').map(token => token.trim()).filter(token => token);
       const channelIds = channelIdInput.value.split('\n').map(id => id.trim()).filter(id => id);
       const message = messageInput.value;
       const interval = parseFloat(intervalInput.value);
 
-      if (!token || !channelIds.length || !message || isNaN(interval)) {
-        alert('Please fill in all fields');
+      if (!tokens.length || !channelIds.length || !message || isNaN(interval)) {
+        logToConsole('Please fill in all fields');
         return;
       }
 
       intervalId = setInterval(() => {
-        channelIds.forEach(channelId => {
-          sendMessage(token, channelId, message);
+        tokens.forEach(token => {
+          channelIds.forEach(channelId => {
+            const currentMessage = randomCharsCheckbox.checked ? addRandomChars(message) : message;
+            sendMessage(token, channelId, currentMessage);
+          });
         });
       }, interval * 1000);
+      
+      logToConsole('Started sending messages');
     });
 
     stopButton.addEventListener('click', () => {
       clearInterval(intervalId);
+      logToConsole('Stopped sending messages');
+    });
+
+    clearLogButton.addEventListener('click', () => {
+      consoleOutput.innerHTML = '';
     });
 
     function sendMessage(token, channelId, message) {
@@ -63,12 +94,28 @@
       })
       .then(response => {
         if (response.ok) {
-          console.log(`Message sent to ${channelId}: ${message}`);
+          logToConsole(`Message sent to ${channelId} using token: ${token.substring(0, 10)}...`);
         } else {
-          console.error(`Error: ${response.status}`);
+          logToConsole(`Error: ${response.status} for token: ${token.substring(0, 10)}...`);
         }
       })
-      .catch(error => console.error('Error:', error));
+      .catch(error => logToConsole(`Error: ${error} for token: ${token.substring(0, 10)}...`));
+    }
+
+    function logToConsole(message) {
+      const logEntry = document.createElement('div');
+      logEntry.textContent = message;
+      consoleOutput.appendChild(logEntry);
+      consoleOutput.scrollTop = consoleOutput.scrollHeight;
+    }
+
+    function addRandomChars(message) {
+      const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let randomChars = '';
+      for (let i = 0; i < 3; i++) {
+        randomChars += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return `${message} ${randomChars}`;
     }
   </script>
 </body>
