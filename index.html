@@ -5,36 +5,51 @@
   <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-  <header>
+
+<div class="stars">
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+</div>
+
+<header>
     <h1>Discord nuker</h1>
-  </header>
-  
-  <main>
+</header>
+
+<main>
     <div class="container">
-      <textarea id="token" placeholder="Discord Tokens (1 token per line)" class="token-input"></textarea>
-      <textarea id="channelId" placeholder="Channel IDs"></textarea>
-      <textarea id="message" placeholder="Message"></textarea>
-      <input id="interval" type="number" step="0.1" placeholder="Interval (s)">
-      <div class="button-group">
-        <button id="start-button">Start</button>
-        <button id="stop-button">Stop</button>
-        <label for="random-chars" class="checkbox-label">
-          <input type="checkbox" id="random-chars">
-          Add random characters
-        </label>
-      </div>
+        <textarea id="token" placeholder="Discord Tokens (1 token per line)" class="token-input"></textarea>
+        <textarea id="channelId" placeholder="Channel IDs"></textarea>
+        <textarea id="message" placeholder="Message"></textarea>
+        <input id="interval" type="number" step="0.1" placeholder="Interval (s)">
+        <div class="button-group">
+            <button id="start-button">Start</button>
+            <button id="stop-button">Stop</button>
+            <button id="check-tokens-button">Check Tokens</button>
+            <label for="random-chars" class="checkbox-label">
+                <input type="checkbox" id="random-chars">
+                Add random characters
+            </label>
+        </div>
     </div>
 
     <div class="console">
-      <div class="console-header">
-        Console
-        <button id="clear-log-button">Clear Log</button>
-      </div>
-      <div id="console-output"></div>
+        <div class="console-header">
+            Console
+            <button id="clear-log-button">Clear Log</button>
+        </div>
+        <div id="console-output"></div>
     </div>
-  </main>
+</main>
 
-  <script>
+<script>
     const startButton = document.getElementById('start-button');
     const stopButton = document.getElementById('stop-button');
     const tokenInput = document.getElementById('token');
@@ -44,79 +59,103 @@
     const consoleOutput = document.getElementById('console-output');
     const clearLogButton = document.getElementById('clear-log-button');
     const randomCharsCheckbox = document.getElementById('random-chars');
+    const checkTokensButton = document.getElementById('check-tokens-button');
 
     let intervalId = null;
 
     startButton.addEventListener('click', () => {
-      const tokens = tokenInput.value.split('\n').map(token => token.trim()).filter(token => token);
-      const channelIds = channelIdInput.value.split('\n').map(id => id.trim()).filter(id => id);
-      const message = messageInput.value;
-      const interval = parseFloat(intervalInput.value);
+        const tokens = tokenInput.value.split('\n').map(token => token.trim()).filter(token => token);
+        const channelIds = channelIdInput.value.split('\n').map(id => id.trim()).filter(id => id);
+        const message = messageInput.value;
+        const interval = parseFloat(intervalInput.value);
 
-      if (!tokens.length || !channelIds.length || !message || isNaN(interval)) {
-        logToConsole('Please fill in all fields');
-        return;
-      }
+        if (!tokens.length || !channelIds.length || !message || isNaN(interval)) {
+            logToConsole('Please fill in all fields');
+            return;
+        }
 
-      intervalId = setInterval(() => {
-        tokens.forEach(token => {
-          channelIds.forEach(channelId => {
-            const currentMessage = randomCharsCheckbox.checked ? addRandomChars(message) : message;
-            sendMessage(token, channelId, currentMessage);
-          });
-        });
-      }, interval * 1000);
-      
-      logToConsole('Started sending messages');
+        intervalId = setInterval(() => {
+            tokens.forEach(token => {
+                channelIds.forEach(channelId => {
+                    const currentMessage = randomCharsCheckbox.checked ? addRandomChars(message) : message;
+                    sendMessage(token, channelId, currentMessage);
+                });
+            });
+        }, interval * 1000);
+        
+        logToConsole('Started sending messages');
     });
 
     stopButton.addEventListener('click', () => {
-      clearInterval(intervalId);
-      logToConsole('Stopped sending messages');
+        clearInterval(intervalId);
+        logToConsole('Stopped sending messages');
     });
 
     clearLogButton.addEventListener('click', () => {
-      consoleOutput.innerHTML = '';
+        consoleOutput.innerHTML = '';
+    });
+
+    checkTokensButton.addEventListener('click', () => {
+        const tokens = tokenInput.value.split('\n').map(token => token.trim()).filter(token => token);
+        tokens.forEach(checkToken);
     });
 
     function sendMessage(token, channelId, message) {
-      const url = `https://discord.com/api/v9/channels/${channelId}/messages`;
-      const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': token
-      };
-      const body = JSON.stringify({ content: message });
+        const url = `https://discord.com/api/v9/channels/${channelId}/messages`;
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        };
+        const body = JSON.stringify({ content: message });
 
-      fetch(url, {
-        method: 'POST',
-        headers: headers,
-        body: body
-      })
-      .then(response => {
-        if (response.ok) {
-          logToConsole(`Message sent to ${channelId} using token: ${token.substring(0, 10)}...`);
-        } else {
-          logToConsole(`Error: ${response.status} for token: ${token.substring(0, 10)}...`);
-        }
-      })
-      .catch(error => logToConsole(`Error: ${error} for token: ${token.substring(0, 10)}...`));
+        fetch(url, {
+            method: 'POST',
+            headers: headers,
+            body: body
+        })
+        .then(response => {
+            if (response.ok) {
+                logToConsole(`Message sent to ${channelId} using token: ${token.substring(0, 10)}...`);
+            } else {
+                logToConsole(`Error: ${response.status} for token: ${token.substring(0, 10)}...`);
+            }
+        })
+        .catch(error => logToConsole(`Error: ${error} for token: ${token.substring(0, 10)}...`));
     }
 
-    function logToConsole(message) {
-      const logEntry = document.createElement('div');
-      logEntry.textContent = message;
-      consoleOutput.appendChild(logEntry);
-      consoleOutput.scrollTop = consoleOutput.scrollHeight;
+    function checkToken(token) {
+        fetch('https://discord.com/api/v9/users/@me', {
+            headers: {
+                'Authorization': token
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                logToConsole(`Token valid: ${token}`, 'green');
+            } else {
+                logToConsole(`Token invalid: ${token}`, 'red');
+            }
+        })
+        .catch(error => logToConsole(`Error checking token: ${token} - ${error}`, 'red'));
+    }
+
+    function logToConsole(message, color = 'white') {
+        const logEntry = document.createElement('div');
+        logEntry.textContent = message;
+        logEntry.style.color = color;
+        consoleOutput.appendChild(logEntry);
+        consoleOutput.scrollTop = consoleOutput.scrollHeight;
     }
 
     function addRandomChars(message) {
-      const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      let randomChars = '';
-      for (let i = 0; i < 3; i++) {
-        randomChars += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return `${message} ${randomChars}`;
+        const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let randomChars = '';
+        for (let i = 0; i < 3; i++) {
+            randomChars += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return `${message} ${randomChars}`;
     }
-  </script>
+</script>
+
 </body>
 </html>
